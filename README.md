@@ -36,20 +36,8 @@ Este repositorio **no incluye**:
 
 El proyecto está organizado de forma modular, orientado a experimentación reproducible:
 
-modelFER/
-├── configs/ # Configuraciones YAML de los experimentos
-├── src/ # Código principal de entrenamiento y evaluación
-│ ├── exp1/ # Fine-tuning sin Knowledge Distillation
-│ ├── exp2-E/ # KD aplicada a EfficientNet
-│ ├── exp2-M/ # KD aplicada a MobileNet
-│ ├── exp3/ # Entrenamiento directo (baseline controlado)
-│ ├── exp4-M/ # Knowledge Distillation relacional
-│ └── exp5-M/ # Knowledge Distillation híbrida
-├── scripts/ # Scripts auxiliares
-├── infer_image.py # Inferencia sobre una imagen individual
-├── inspect_model.py
-├── smoke_test.py
-└── requirements.txt
+<img width="283" height="595" alt="image" src="https://github.com/user-attachments/assets/9e13936a-b2b7-4038-a1fb-09b7076c0e7e" />
+
 
 
 Cada experimento está definido por:
@@ -134,3 +122,4 @@ Los resultados cuantitativos, figuras comparativas y modelos entrenados se propo
 Este repositorio está orientado a **investigación académica y experimentación**, no a despliegue en producción.
 
 Para el análisis completo de resultados y conclusiones, consultar la publicación asociada a este trabajo.
+
