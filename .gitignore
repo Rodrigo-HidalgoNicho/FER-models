@@ -1,0 +1,24 @@
+# Entornos y cache
+__pycache__/
+*.pyc
+.venv/
+.idea/
+
+# Resultados y salidas
+outputs/
+phase3/
+
+# Modelos y pesos
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.onnx
+
+# Datasets
+data/
+datasets/
+
+# Archivos temporales
+*.bak
+

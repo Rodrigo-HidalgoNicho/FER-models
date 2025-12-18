@@ -1,0 +1,96 @@
+experiment:
+  name: "phase3M"
+  output_dir: "outputs/phase3"
+
+model:
+  num_classes: 7
+  backbone: "mobilenetv3"     # opciones: mobilenetv3 | efficientnetb0 | yolov11
+
+knowledge_distillation:
+  alpha: 0.5
+  temperature: 3.0
+
+loss:
+  type: "focal"
+  gamma: 2.0
+  label_smoothing: 0.05
+
+train:
+  batch_size: 64             # default, sobreescrito por fases
+  epochs: 30
+  learning_rate: 0.0001
+  patience: 7                # para early stopping y plateau si aplica
+  optimizer: "adamw"         # opciones: adamw | sgd
+  scheduler: "onecycle"      # opciones: onecycle | cosine | plateau | none
+  weight_decay: 0.05         # antes estaba hardcodeado en scripts
+  plateau_factor: 0.5        # factor de reducción LR en ReduceLROnPlateau
+  plateau_patience: 5        # paciencia para plateau en epochs sin mejora
+  num_workers: 2
+
+phases:
+  phase1:
+    input_size: [224, 224, 3]
+    augmentations: ["randaugment", "randomerasing", "mixup", "cutmix"]
+    max_epochs: 30
+    patience: 12
+    min_epochs: 15
+    batch_size: 16
+    learning_rate: 0.0001    # sobreescribe train.learning_rate si se indica
+    teacher: "inceptionv3"   # teacher para fase 1
+  phase2:
+    input_size: [48, 48, 3]
+    augmentations: ["flip", "randomcrop", "mixup"]
+    max_epochs: 100
+    patience: 0
+    min_epochs: 12
+    learning_rate: 0.00005
+    batch_size: 16
+    teacher: "resnet50"      # teacher para fase 2, opciones: resnet50 | resnet101
+
+datasets:
+  fer2013:
+    train_dir: "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/fer-2013/train"
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/fer-2013/test"
+
+  affectnet:
+    train_dir: "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/AffectNet/train"
+    val_dir:   "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/AffectNet/val"
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/DatasetsAffectNet/test"
+
+  rafdb:
+    train_dir: "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/RAF-DB/train"
+    val_dir:   "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/RAF-DB/val"
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/RAF-DB/test"
+
+  ckplus:
+    root_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/CK+"
+    exclude: ["contempt"]
+
+classes: ["angry","disgust","fear","happy","sad","surprise","neutral"]
+
+affectnet_map:
+  "0": "angry"
+  "1": "disgust"
+  "2": "fear"
+  "3": "happy"
+  "4": "neutral"
+  "5": "sad"
+  "6": "surprise"
+  "7": null
+
+rafdb_map:
+  "1": "surprise"
+  "2": "fear"
+  "3": "disgust"
+  "4": "happy"
+  "5": "sad"
+  "6": "angry"
+  "7": "neutral"
+
+ckplus_map:
+  "angry": "angry"
+  "disgust": "disgust"
+  "fear": "fear"
+  "happy": "happy"
+  "sad": "sad"
+  "surprise": "surprise"

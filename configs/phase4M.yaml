@@ -1,0 +1,81 @@
+experiment:
+  name: "phase4M"
+  output_dir: "outputs/phase3"
+
+model:
+  backbone: "efficientnetv2_m"      # luego podrás usar "mobilenetv3"
+  num_classes: 7
+
+teacher:
+  name: "resnet50"             # teacher único
+
+knowledge_distillation:
+  type: "rkd_distance_only"
+  alpha: 0.55                  # CE
+  beta: 0.0                    # KL OFF (solo distancia)
+  gamma: 0.45                  # RKD-distance
+  temperature: 4.0
+  use_distance: true
+  use_angle: false
+
+loss:
+  type: "focal"                # o "ce" si prefieres, como venías usando
+  gamma: 2.0
+  label_smoothing: 0.05
+
+train:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.0003
+  optimizer: "adamw"
+  scheduler: "onecycle"        # o "cosine"
+  weight_decay: 0.05
+  patience: 20
+  min_epochs: 20
+  val_every: 1
+  num_workers: 2
+  grad_clip_norm: 1.0
+  kd_warmup_epochs: 3
+  amp: true
+
+input:
+  size: [224, 224, 3]
+  augmentations: ["randaugment","randomerasing","flip"]   # (mixup/cutmix opcional desde epoch 6–8)
+
+datasets:
+  affectnet:
+    train_dir: "/kaggle/input/affectnet-fase3/AffectNet/train"
+    val_dir:   "/kaggle/input/affectnet-fase3/AffectNet/val"
+    test_dir:  "/kaggle/input/affectnet-fase3/AffectNet/test"
+
+  rafdb:
+    train_dir: "/kaggle/input/raf-db/RAF-DB/train"
+    val_dir:   "/kaggle/input/raf-db/RAF-DB/val"
+    test_dir:  "/kaggle/input/raf-db/RAF-DB/test"
+
+  # SOLO evaluación cross-corpus:
+  fer2013:
+    test_dir: "/kaggle/input/fer-2013/test"
+  ckplus:
+    root_dir: "/kaggle/input/ck-fer/CK+"
+
+classes: ["angry","disgust","fear","happy","sad","surprise","neutral"]
+
+affectnet_map:
+  "0": "angry"
+  "1": "disgust"
+  "2": "fear"
+  "3": "happy"
+  "4": "neutral"
+  "5": "sad"
+  "6": "surprise"
+  "7": null
+
+rafdb_map:
+  "1": "surprise"
+  "2": "fear"
+  "3": "disgust"
+  "4": "happy"
+  "5": "sad"
+  "6": "angry"
+  "7": "neutral"

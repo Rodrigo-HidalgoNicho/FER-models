@@ -1,0 +1,101 @@
+experiment:
+  name: "phase3E3.1"
+  output_dir: "outputs/phase3"
+
+model:
+  num_classes: 7
+  input_size: [192, 192, 3]
+
+train:
+  batch_size: 16
+  epochs: 100
+  learning_rate: 0.00015         # intermedio, estable en Kaggle
+  optimizer: "adamw"
+  weight_decay: 0.02             # controlado, evita drift
+  scheduler: "cosine"
+  label_smoothing: 0.1           # menos agresivo, mejora generalización
+  patience: 10                   # early stop más relajado
+  seed: 42
+  monitor: "val_f1_macro"
+  save_best_only: true
+  num_workers: 0
+
+backbone: "efficientnetv2_m"  # # opciones: mobilenetv3 | efficientnetv2_m
+
+loss:
+  type: "crossentropy"
+  class_weights: true
+  label_smoothing: 0.1
+
+datasets:
+  # Solo AffectNet se usa para entrenamiento y validación
+  affectnet:
+    train_dir: "/kaggle/input/affectnet-fase3/AffectNet/train"
+    val_dir:   "/kaggle/input/affectnet-fase3/AffectNet/val"
+    test_dir:  "/kaggle/input/affectnet-fase3/AffectNet/test"
+
+  # Estos se mantienen solo para evaluación cross-corpus (E4)
+  rafdb:
+    test_dir:  "/kaggle/input/raf-db/RAF-DB/test"
+
+  fer2013:
+    test_dir:  "/kaggle/input/fer-2013/test"
+
+  ckplus:
+    root_dir:  "/kaggle/input/ck-fer/CK+"
+    exclude: ["contempt"]
+
+affectnet_map:
+  "0": "angry"
+  "1": "disgust"
+  "2": "fear"
+  "3": "happy"
+  "4": "neutral"
+  "5": "sad"
+  "6": "surprise"
+  "7": null
+
+rafdb_map:
+  "1": "surprise"
+  "2": "fear"
+  "3": "disgust"
+  "4": "happy"
+  "5": "sad"
+  "6": "angry"
+  "7": "neutral"
+
+ckplus_map:
+  "angry": "angry"
+  "disgust": "disgust"
+  "fear": "fear"
+  "happy": "happy"
+  "sad": "sad"
+  "surprise": "surprise"
+
+augmentations:
+  mixup: 0.15
+  copy_paste: 0.15
+  hsv_h: 0.02
+  hsv_s: 0.8
+  hsv_v: 0.5
+  degrees: 45.0
+  translate: 0.2
+  scale: [0.7, 1.0]
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.0
+  fliplr: 0.5
+  mosaic: 0.0
+  auto_augment: "randaugment"
+  erasing: 0.5
+
+evaluation:
+  metrics: ["accuracy", "f1_macro", "ece"]
+  calibration_bins: 10
+  ece_target: 0.10
+
+export:
+  save_csv: true
+  save_confusion: true
+  save_preds: true
+  save_onnx: true

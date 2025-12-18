@@ -1,0 +1,69 @@
+experiment:
+  name: "phase3"
+  output_dir: "outputs/phase3"
+
+model:
+  num_classes: 7
+  input_size: [160, 160, 3] # [224, 224, 3]
+
+train:
+  batch_size: 32
+  epochs: 60
+  learning_rate: 0.0001
+  patience: 20
+
+# Cambia este valor según la corrida
+backbone: "mobilenetv3"   # opciones: mobilenetv3 | efficientnetb0
+
+loss:
+  type: "focal"            # opciones: focal | crossentropy
+  gamma: 2.0
+  label_smoothing: 0.1
+
+datasets:
+  fer2013:
+    train_dir: "/kaggle/input/fer-2013/train"
+    test_dir:  "/kaggle/input/fer-2013/test"
+
+  affectnet:
+    train_dir: "/kaggle/input/affectnet-fase3/AffectNet/train"
+    val_dir:   "/kaggle/input/affectnet-fase3/AffectNet/val"
+    test_dir:  "/kaggle/input/affectnet-fase3/AffectNet/test"
+
+  rafdb:
+    train_dir: "/kaggle/input/raf-db/RAF-DB/train"
+    val_dir:   "/kaggle/input/raf-db/RAF-DB/val"
+    test_dir:  "/kaggle/input/raf-db/RAF-DB/test"
+
+  ckplus:
+    root_dir:  "/kaggle/input/ck-fer/CK+"
+    exclude: ["contempt"]
+
+affectnet_map:
+  "0": "angry"
+  "1": "disgust"
+  "2": "fear"
+  "3": "happy"
+  "4": "neutral"
+  "5": "sad"
+  "6": "surprise"
+  "7": null
+
+rafdb_map:
+  "1": "surprise"
+  "2": "fear"
+  "3": "disgust"
+  "4": "happy"
+  "5": "sad"
+  "6": "angry"
+  "7": "neutral"
+
+ckplus_map:
+  "angry": "angry"
+  "disgust": "disgust"
+  "fear": "fear"
+  "happy": "happy"
+  "sad": "sad"
+  "surprise": "surprise"
+
+

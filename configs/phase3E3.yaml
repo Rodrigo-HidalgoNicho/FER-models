@@ -1,0 +1,101 @@
+experiment:
+  name: "phase3E3"
+  output_dir: "outputs/phase3"
+
+model:
+  num_classes: 7
+  input_size: [224, 224, 3]        # resolución estándar para backbones de fase 3
+
+train:
+  batch_size: 32
+  epochs: 100                      # entrenamientos largos (100 epochs)
+  learning_rate: 0.0001
+  optimizer: "adamw"
+  weight_decay: 0.05
+  scheduler: "cosine"              # CosineAnnealingLR
+  label_smoothing: 0.05
+  patience: 0                      # entrenamiento completo, sin early stopping
+  seed: 42
+  monitor: "val_f1_macro"
+  save_best_only: true
+
+backbone: "mobilenetv3"            # opciones: mobilenetv3 | efficientnetb0
+
+loss:
+  type: "crossentropy"             # se reemplaza focal -> crossentropy
+  class_weights: true
+  label_smoothing: 0.05
+
+datasets:
+  # Solo AffectNet se usa para entrenamiento y validación
+  affectnet:
+    train_dir: "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/AffectNet/train"
+    val_dir:   "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/AffectNet/val"
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/AffectNet/test"
+
+  # Estos se mantienen solo para evaluación cross-corpus (E4)
+  rafdb:
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/RAF-DB/test"
+
+  fer2013:
+    test_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/fer-2013/test"
+
+  ckplus:
+    root_dir:  "C:/Users/alvar/OneDrive/Documentos/Development/tesis/Datasets/CK+"
+    exclude: ["contempt"]
+
+# Mapeos consistentes con AffectNet y otros datasets
+affectnet_map:
+  "0": "angry"
+  "1": "disgust"
+  "2": "fear"
+  "3": "happy"
+  "4": "neutral"
+  "5": "sad"
+  "6": "surprise"
+  "7": null
+
+rafdb_map:
+  "1": "surprise"
+  "2": "fear"
+  "3": "disgust"
+  "4": "happy"
+  "5": "sad"
+  "6": "angry"
+  "7": "neutral"
+
+ckplus_map:
+  "angry": "angry"
+  "disgust": "disgust"
+  "fear": "fear"
+  "happy": "happy"
+  "sad": "sad"
+  "surprise": "surprise"
+
+augmentations:
+  mixup: 0.15
+  copy_paste: 0.15
+  hsv_h: 0.02
+  hsv_s: 0.8
+  hsv_v: 0.5
+  degrees: 45.0
+  translate: 0.2
+  scale: [0.7, 1.0]
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.0
+  fliplr: 0.5
+  mosaic: 0.0
+  auto_augment: "randaugment"
+  erasing: 0.5
+
+evaluation:
+  metrics: ["accuracy", "f1_macro", "ece"]
+  calibration_bins: 10
+  ece_target: 0.10
+
+export:
+  save_csv: true
+  save_confusion: true
+  save_preds: true
+  save_onnx: true
