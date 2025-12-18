@@ -55,7 +55,7 @@ Se implementaron **cinco configuraciones experimentales**:
   Fine-tuning de modelos livianos sin Knowledge Distillation.
 
 - **Experimento 2**  
-  Fine-tuning con Knowledge Distillation básica aplicada a MobileNetV3 y EfficientNet.Se usaron 2 teachers en 2 fases: resnet50 e inceptionv3. Esto mostró saturación durante el aprendizaje, se corrigió para los experimentos 4 y 5.
+  Fine-tuning con Knowledge Distillation básica aplicada a MobileNetV3 y EfficientNet.Se usaron 2 teachers en 2 fases: resnet50 e inceptionv3.
 
 - **Experimento 3**  
   Entrenamiento directo sin KD como baseline controlado.
@@ -122,5 +122,6 @@ Los resultados cuantitativos, figuras comparativas y modelos entrenados se propo
 Este repositorio está orientado a **investigación académica y experimentación**, no a despliegue en producción.
 
 Para el análisis completo de resultados y conclusiones, consultar la publicación asociada a este trabajo.
+
 
 
