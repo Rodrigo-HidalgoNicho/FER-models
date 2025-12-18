@@ -1,4 +1,4 @@
-# FER-models — Facial Emotion Recognition Experiments
+# FER-models - Facial Emotion Recognition Experiments
 
 Este repositorio contiene el código utilizado para el entrenamiento y evaluación de modelos de **Reconocimiento de Expresiones Faciales (FER)**, desarrollado como parte de un estudio experimental presentado en un **conference paper**.
 
@@ -122,4 +122,5 @@ Los resultados cuantitativos, figuras comparativas y modelos entrenados se propo
 Este repositorio está orientado a **investigación académica y experimentación**, no a despliegue en producción.
 
 Para el análisis completo de resultados y conclusiones, consultar la publicación asociada a este trabajo.
+
 
